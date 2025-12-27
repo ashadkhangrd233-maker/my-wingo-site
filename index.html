@@ -3,61 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wingo Pro - Professional</title>
+    <title>Wingo Pro - Jalwa Style</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { background-color: #090e1e; color: white; font-family: Arial, sans-serif; margin: 0; }
-        .container { padding: 20px; text-align: center; }
-        .input-group { background: #161d31; border-radius: 10px; margin: 15px 0; padding: 10px; display: flex; align-items: center; }
-        input { background: transparent; border: none; color: white; width: 100%; padding: 10px; outline: none; }
-        .btn-main { background: linear-gradient(90deg, #28c76f, #48da89); border: none; width: 100%; padding: 15px; border-radius: 25px; color: white; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 20px; }
-        .tabs { display: flex; justify-content: space-around; margin-bottom: 30px; border-bottom: 2px solid #161d31; }
-        .tab { padding: 10px; cursor: pointer; color: #b4b7bd; }
+        body { background-color: #090e1e; color: white; font-family: Arial, sans-serif; margin: 0; overflow-x: hidden; }
+        .container { padding: 15px; }
+        
+        /* Auth Styles */
+        .auth-box { text-align: center; padding-top: 50px; }
+        .tabs { display: flex; justify-content: space-around; margin-bottom: 25px; border-bottom: 1px solid #1e263c; }
+        .tab { padding: 10px; color: #8a8d91; cursor: pointer; font-weight: bold; }
         .tab.active { color: #28c76f; border-bottom: 2px solid #28c76f; }
-        #home-page, #register-page { display: none; }
-        .game-icon { background: #161d31; padding: 20px; border-radius: 20px; display: inline-block; width: 80px; }
+        .input-group { background: #161d31; border-radius: 10px; margin: 15px 0; padding: 12px; display: flex; align-items: center; border: 1px solid #283046; }
+        input { background: transparent; border: none; color: white; width: 100%; outline: none; margin-left: 10px; }
+        .btn-main { background: linear-gradient(90deg, #28c76f, #48da89); border: none; width: 100%; padding: 15px; border-radius: 25px; color: white; font-weight: bold; cursor: pointer; }
+
+        /* Wingo Game Styles */
+        #game-page { display: none; }
+        .header { background: #161d31; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #283046; }
+        .timer-box { background: #161d31; margin: 15px; padding: 15px; border-radius: 15px; display: flex; justify-content: space-between; border-left: 5px solid #28c76f; }
+        .number-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 15px; }
+        .num-btn { width: 50px; height: 50px; border-radius: 50%; border: none; font-weight: bold; color: white; font-size: 18px; cursor: pointer; }
+        .color-btns { display: flex; justify-content: space-between; gap: 10px; margin: 15px; }
+        .c-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: bold; color: white; cursor: pointer; }
+        
+        /* Colors */
+        .n0, .n5 { background: linear-gradient(to right, #fb4e4e, #b659fe); }
+        .n1, .n3, .n7, .n9 { background: #28c76f; }
+        .n2, .n4, .n6, .n8 { background: #fb4e4e; }
+        .green { background: #28c76f; } .violet { background: #b659fe; } .red { background: #fb4e4e; }
+        .big { background: #ffa500; border-radius: 20px 0 0 20px; } .small { background: #4d89ff; border-radius: 0 20px 20px 0; }
     </style>
 </head>
 <body>
 
-<div id="auth-page" class="container">
-    <h2 style="margin-top: 50px;">Log in</h2>
+<div id="auth-section" class="container auth-box">
+    <h2>Log in / Register</h2>
     <div class="tabs">
-        <div class="tab active" onclick="showAuth('login')">Phone number</div>
-        <div class="tab" onclick="showAuth('register')">Register</div>
+        <div id="tab-login" class="tab active" onclick="switchTab('login')">Phone number</div>
+        <div id="tab-register" class="tab" onclick="switchTab('register')">Register</div>
     </div>
     
-    <div class="input-group">
-        <span>📞</span><input type="number" placeholder="Phone number">
+    <div class="input-group">📞 <input type="number" id="phone" placeholder="Phone number"></div>
+    <div class="input-group">🔒 <input type="password" id="pass" placeholder="Password"></div>
+    <div id="reg-fields" style="display:none;">
+        <div class="input-group">🔒 <input type="password" placeholder="Confirm Password"></div>
+        <div class="input-group">🎁 <input type="text" placeholder="Invite Code"></div>
     </div>
-    <div class="input-group">
-        <span>🔒</span><input type="password" placeholder="Password">
-    </div>
-    <button class="btn-main" onclick="login()">Log in</button>
+    
+    <button class="btn-main" id="auth-btn" onclick="handleAuth()">Log in</button>
 </div>
 
-<div id="home-page">
-    <div style="background: #161d31; padding: 15px; display: flex; justify-content: space-between; align-items: center;">
+<div id="game-page">
+    <div class="header">
         <span>🎰 WINGO PRO</span>
-        <div style="background: #090e1e; padding: 5px 15px; border-radius: 20px;">₹150.00</div>
+        <div style="color: #facc15; font-weight: bold;">₹150.00</div>
     </div>
-    
-    <div class="container" style="text-align: left;">
-        <h3>Lottery</h3>
-        <div class="game-icon" onclick="alert('Wingo Starting...')">
-            <img src="https://cdn-icons-png.flaticon.com/512/1041/1041409.png" width="50">
-            <div style="font-size: 12px; margin-top: 5px;">Wingo</div>
-        </div>
+
+    <div class="timer-box">
+        <div>Wingo 30s<br><small>20251227001</small></div>
+        <div style="text-align: right;">Time remaining<br><b style="font-size: 20px; color: #28c76f;">00:24</b></div>
+    </div>
+
+    <div class="color-btns">
+        <button class="c-btn green" onclick="bet('Green')">Green</button>
+        <button class="c-btn violet" onclick="bet('Violet')">Violet</button>
+        <button class="c-btn red" onclick="bet('Red')">Red</button>
+    </div>
+
+    <div class="number-grid">
+        <button class="num-btn n0" onclick="bet('0')">0</button>
+        <button class="num-btn n1" onclick="bet('1')">1</button>
+        <button class="num-btn n2" onclick="bet('2')">2</button>
+        <button class="num-btn n3" onclick="bet('3')">3</button>
+        <button class="num-btn n4" onclick="bet('4')">4</button>
+        <button class="num-btn n5" onclick="bet('5')">5</button>
+        <button class="num-btn n6" onclick="bet('6')">6</button>
+        <button class="num-btn n7" onclick="bet('7')">7</button>
+        <button class="num-btn n8" onclick="bet('8')">8</button>
+        <button class="num-btn n9" onclick="bet('9')">9</button>
+    </div>
+
+    <div class="color-btns">
+        <button class="c-btn big" onclick="bet('Big')">Big</button>
+        <button class="c-btn small" onclick="bet('Small')">Small</button>
     </div>
 </div>
 
 <script>
-    function showAuth(type) {
-        // Tabs switch karne ka logic
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+
+    function switchTab(type) {
+        const isLogin = type === 'login';
+        document.getElementById('tab-login').className = isLogin ? 'tab active' : 'tab';
+        document.getElementById('tab-register').className = isLogin ? 'tab' : 'tab active';
+        document.getElementById('reg-fields').style.display = isLogin ? 'none' : 'block';
+        document.getElementById('auth-btn').innerText = isLogin ? 'Log in' : 'Register';
     }
 
-    function login() {
-        document.getElementById('auth-page').style.display = 'none';
-        document.getElementById('home-page').style.display = 'block';
+    function handleAuth() {
+        document.getElementById('auth-section').style.display = 'none';
+        document.getElementById('game-page').style.display = 'block';
+    }
+
+    function bet(val) {
+        tg.showConfirm("Bet on " + val + " (₹10)?", (ok) => {
+            if(ok) tg.sendData("BET:" + val);
+        });
     }
 </script>
 </body>
