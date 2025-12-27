@@ -3,114 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wingo Pro - Jalwa Style</title>
+    <title>Jalwa Pro - Wingo</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { background-color: #090e1e; color: white; font-family: Arial, sans-serif; margin: 0; overflow-x: hidden; }
-        .container { padding: 15px; }
+        body { background-color: #090e1e; color: white; font-family: Arial, sans-serif; margin: 0; padding-bottom: 70px; }
+        .header { background: #161d31; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #283046; position: sticky; top: 0; z-index: 100; }
+        .balance-card { background: linear-gradient(135deg, #28c76f, #1e8e4e); margin: 15px; padding: 20px; border-radius: 15px; position: relative; overflow: hidden; }
         
-        /* Auth Styles */
-        .auth-box { text-align: center; padding-top: 50px; }
-        .tabs { display: flex; justify-content: space-around; margin-bottom: 25px; border-bottom: 1px solid #1e263c; }
-        .tab { padding: 10px; color: #8a8d91; cursor: pointer; font-weight: bold; }
-        .tab.active { color: #28c76f; border-bottom: 2px solid #28c76f; }
-        .input-group { background: #161d31; border-radius: 10px; margin: 15px 0; padding: 12px; display: flex; align-items: center; border: 1px solid #283046; }
-        input { background: transparent; border: none; color: white; width: 100%; outline: none; margin-left: 10px; }
-        .btn-main { background: linear-gradient(90deg, #28c76f, #48da89); border: none; width: 100%; padding: 15px; border-radius: 25px; color: white; font-weight: bold; cursor: pointer; }
+        /* Game Sections */
+        #home-page, #game-page, #account-page { display: none; }
+        #home-page { display: block; }
 
-        /* Wingo Game Styles */
-        #game-page { display: none; }
-        .header { background: #161d31; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #283046; }
-        .timer-box { background: #161d31; margin: 15px; padding: 15px; border-radius: 15px; display: flex; justify-content: space-between; border-left: 5px solid #28c76f; }
-        .number-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 15px; }
-        .num-btn { width: 50px; height: 50px; border-radius: 50%; border: none; font-weight: bold; color: white; font-size: 18px; cursor: pointer; }
-        .color-btns { display: flex; justify-content: space-between; gap: 10px; margin: 15px; }
-        .c-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: bold; color: white; cursor: pointer; }
-        
-        /* Colors */
-        .n0, .n5 { background: linear-gradient(to right, #fb4e4e, #b659fe); }
-        .n1, .n3, .n7, .n9 { background: #28c76f; }
-        .n2, .n4, .n6, .n8 { background: #fb4e4e; }
+        /* Wingo Betting UI */
+        .timer-box { background: #161d31; margin: 10px; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; border-left: 4px solid #facc15; }
+        .bet-options { display: flex; justify-content: space-around; gap: 5px; margin: 10px; }
+        .btn-bet { flex: 1; border: none; padding: 12px; border-radius: 5px; color: white; font-weight: bold; font-size: 14px; cursor: pointer; }
         .green { background: #28c76f; } .violet { background: #b659fe; } .red { background: #fb4e4e; }
-        .big { background: #ffa500; border-radius: 20px 0 0 20px; } .small { background: #4d89ff; border-radius: 0 20px 20px 0; }
+        .big { background: #ffa500; } .small { background: #4d89ff; }
+
+        .num-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; padding: 10px; }
+        .n-btn { border: none; height: 45px; border-radius: 5px; color: white; font-weight: bold; }
+
+        /* History Tabs */
+        .history-tabs { display: flex; background: #161d31; margin-top: 20px; }
+        .h-tab { flex: 1; padding: 10px; text-align: center; font-size: 12px; border-bottom: 2px solid transparent; }
+        .h-tab.active { border-bottom: 2px solid #28c76f; color: #28c76f; }
+
+        /* Bottom Nav */
+        .nav-bar { position: fixed; bottom: 0; width: 100%; background: #161d31; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #283046; }
+        .nav-item { font-size: 10px; text-align: center; color: #8a8d91; }
+        .nav-item.active { color: #28c76f; }
     </style>
 </head>
 <body>
 
-<div id="auth-section" class="container auth-box">
-    <h2>Log in / Register</h2>
-    <div class="tabs">
-        <div id="tab-login" class="tab active" onclick="switchTab('login')">Phone number</div>
-        <div id="tab-register" class="tab" onclick="switchTab('register')">Register</div>
+<div class="header">
+    <span style="font-weight:bold; color:#28c76f;">JALWA.GAME</span>
+    <div style="font-size: 12px;">🇮🇳 EN</div>
+</div>
+
+<div id="home-page">
+    <div class="balance-card">
+        <small>Wallet balance</small>
+        <h2 id="wallet">₹150.00</h2>
+        <button style="background:white; color:#28c76f; border:none; padding:5px 15px; border-radius:20px; font-weight:bold;">Withdraw</button>
     </div>
-    
-    <div class="input-group">📞 <input type="number" id="phone" placeholder="Phone number"></div>
-    <div class="input-group">🔒 <input type="password" id="pass" placeholder="Password"></div>
-    <div id="reg-fields" style="display:none;">
-        <div class="input-group">🔒 <input type="password" placeholder="Confirm Password"></div>
-        <div class="input-group">🎁 <input type="text" placeholder="Invite Code"></div>
+    <div style="padding: 15px;">
+        <h3 style="border-left: 3px solid #28c76f; padding-left: 10px;">Lottery</h3>
+        <div onclick="showPage('game-page')" style="background:#161d31; padding:20px; border-radius:15px; text-align:center; margin-top:10px;">
+            <img src="https://cdn-icons-png.flaticon.com/512/1041/1041409.png" width="60"><br>
+            <b>Win Go</b>
+        </div>
     </div>
-    
-    <button class="btn-main" id="auth-btn" onclick="handleAuth()">Log in</button>
 </div>
 
 <div id="game-page">
-    <div class="header">
-        <span>🎰 WINGO PRO</span>
-        <div style="color: #facc15; font-weight: bold;">₹150.00</div>
-    </div>
-
     <div class="timer-box">
-        <div>Wingo 30s<br><small>20251227001</small></div>
-        <div style="text-align: right;">Time remaining<br><b style="font-size: 20px; color: #28c76f;">00:24</b></div>
+        <div>Wingo 1min<br><small id="period">20251227001</small></div>
+        <div style="text-align:right;">Time remaining<br><b id="timer" style="font-size:24px; color:#28c76f;">01:00</b></div>
     </div>
 
-    <div class="color-btns">
-        <button class="c-btn green" onclick="bet('Green')">Green</button>
-        <button class="c-btn violet" onclick="bet('Violet')">Violet</button>
-        <button class="c-btn red" onclick="bet('Red')">Red</button>
+    <div class="bet-options">
+        <button class="btn-bet green" onclick="openBet('Green')">Green</button>
+        <button class="btn-bet violet" onclick="openBet('Violet')">Violet</button>
+        <button class="btn-bet red" onclick="openBet('Red')">Red</button>
     </div>
 
-    <div class="number-grid">
-        <button class="num-btn n0" onclick="bet('0')">0</button>
-        <button class="num-btn n1" onclick="bet('1')">1</button>
-        <button class="num-btn n2" onclick="bet('2')">2</button>
-        <button class="num-btn n3" onclick="bet('3')">3</button>
-        <button class="num-btn n4" onclick="bet('4')">4</button>
-        <button class="num-btn n5" onclick="bet('5')">5</button>
-        <button class="num-btn n6" onclick="bet('6')">6</button>
-        <button class="num-btn n7" onclick="bet('7')">7</button>
-        <button class="num-btn n8" onclick="bet('8')">8</button>
-        <button class="num-btn n9" onclick="bet('9')">9</button>
+    <div class="num-grid">
+        <button class="n-btn" style="background:#fb4e4e;" onclick="openBet('0')">0</button>
+        <button class="n-btn" style="background:#28c76f;" onclick="openBet('1')">1</button>
+        <button class="n-btn" style="background:#fb4e4e;" onclick="openBet('2')">2</button>
+        </div>
+
+    <div class="bet-options">
+        <button class="btn-bet big" onclick="openBet('Big')">Big</button>
+        <button class="btn-bet small" onclick="openBet('Small')">Small</button>
     </div>
 
-    <div class="color-btns">
-        <button class="c-btn big" onclick="bet('Big')">Big</button>
-        <button class="c-btn small" onclick="bet('Small')">Small</button>
+    <div class="history-tabs">
+        <div class="h-tab active">Game History</div>
+        <div class="h-tab">Chart</div>
+        <div class="h-tab">My History</div>
     </div>
+    <div id="history-content" style="padding:10px; font-size:12px; text-align:center; color:#8a8d91;">
+        No data available
+    </div>
+</div>
+
+<div class="nav-bar">
+    <div class="nav-item active" onclick="showPage('home-page')">🏠<br>Home</div>
+    <div class="nav-item" onclick="showPage('game-page')">🎮<br>Activity</div>
+    <div class="nav-item">💼<br>Wallet</div>
+    <div class="nav-item">👤<br>Account</div>
 </div>
 
 <script>
     const tg = window.Telegram.WebApp;
     tg.expand();
 
-    function switchTab(type) {
-        const isLogin = type === 'login';
-        document.getElementById('tab-login').className = isLogin ? 'tab active' : 'tab';
-        document.getElementById('tab-register').className = isLogin ? 'tab' : 'tab active';
-        document.getElementById('reg-fields').style.display = isLogin ? 'none' : 'block';
-        document.getElementById('auth-btn').innerText = isLogin ? 'Log in' : 'Register';
+    // Pages Switch Logic
+    function showPage(id) {
+        document.getElementById('home-page').style.display = 'none';
+        document.getElementById('game-page').style.display = 'none';
+        document.getElementById(id).style.display = 'block';
     }
 
-    function handleAuth() {
-        document.getElementById('auth-section').style.display = 'none';
-        document.getElementById('game-page').style.display = 'block';
-    }
+    // Live Timer Logic
+    let timeLeft = 60;
+    setInterval(() => {
+        if(timeLeft <= 0) {
+            timeLeft = 60; 
+            document.getElementById('period').innerText = parseInt(document.getElementById('period').innerText) + 1;
+        }
+        timeLeft--;
+        let mins = Math.floor(timeLeft / 60);
+        let secs = timeLeft % 60;
+        document.getElementById('timer').innerText = `0${mins}:${secs < 10 ? '0'+secs : secs}`;
+    }, 1000);
 
-    function bet(val) {
-        tg.showConfirm("Bet on " + val + " (₹10)?", (ok) => {
-            if(ok) tg.sendData("BET:" + val);
-        });
+    // Betting Popup Logic
+    function openBet(type) {
+        let amount = prompt(`Bet on ${type}\nEnter Amount (Min ₹1):`, "1");
+        if(amount >= 1) {
+            tg.sendData(`BET:${type}:${amount}:${document.getElementById('period').innerText}`);
+            alert("Bet Placed! Waiting for Admin Approval.");
+        }
     }
 </script>
 </body>
