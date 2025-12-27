@@ -3,30 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wingo Game</title>
+    <title>Wingo Pro - Professional</title>
     <style>
-        body { background-color: #1a1a1a; color: white; font-family: Arial, sans-serif; text-align: center; margin: 0; padding: 20px; }
-        .balance-card { background: #333; padding: 20px; border-radius: 15px; margin-bottom: 20px; }
-        .btn-container { display: flex; justify-content: center; gap: 10px; }
-        .btn { padding: 15px 30px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; color: white; }
-        .green { background: #4CAF50; } .violet { background: #9c27b0; } .red { background: #f44336; }
+        body { background-color: #090e1e; color: white; font-family: Arial, sans-serif; margin: 0; }
+        .container { padding: 20px; text-align: center; }
+        .input-group { background: #161d31; border-radius: 10px; margin: 15px 0; padding: 10px; display: flex; align-items: center; }
+        input { background: transparent; border: none; color: white; width: 100%; padding: 10px; outline: none; }
+        .btn-main { background: linear-gradient(90deg, #28c76f, #48da89); border: none; width: 100%; padding: 15px; border-radius: 25px; color: white; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 20px; }
+        .tabs { display: flex; justify-content: space-around; margin-bottom: 30px; border-bottom: 2px solid #161d31; }
+        .tab { padding: 10px; cursor: pointer; color: #b4b7bd; }
+        .tab.active { color: #28c76f; border-bottom: 2px solid #28c76f; }
+        #home-page, #register-page { display: none; }
+        .game-icon { background: #161d31; padding: 20px; border-radius: 20px; display: inline-block; width: 80px; }
     </style>
 </head>
 <body>
-    <div class="balance-card">
-        <h2>🎰 Wingo Pro</h2>
-        <p>Wallet Balance: <span id="user-bal">₹150.00</span></p>
+
+<div id="auth-page" class="container">
+    <h2 style="margin-top: 50px;">Log in</h2>
+    <div class="tabs">
+        <div class="tab active" onclick="showAuth('login')">Phone number</div>
+        <div class="tab" onclick="showAuth('register')">Register</div>
     </div>
-    <div class="btn-container">
-        <button class="btn green" onclick="sendBet('Green')">Green</button>
-        <button class="btn violet" onclick="sendBet('Violet')">Violet</button>
-        <button class="btn red" onclick="sendBet('Red')">Red</button>
+    
+    <div class="input-group">
+        <span>📞</span><input type="number" placeholder="Phone number">
     </div>
-    <script>
-        function sendBet(color) {
-            alert("Bet Placed on " + color + "! Admin approval ka wait karein.");
-            // Yahan hum baad mein Telegram API jochenge
-        }
-    </script>
+    <div class="input-group">
+        <span>🔒</span><input type="password" placeholder="Password">
+    </div>
+    <button class="btn-main" onclick="login()">Log in</button>
+</div>
+
+<div id="home-page">
+    <div style="background: #161d31; padding: 15px; display: flex; justify-content: space-between; align-items: center;">
+        <span>🎰 WINGO PRO</span>
+        <div style="background: #090e1e; padding: 5px 15px; border-radius: 20px;">₹150.00</div>
+    </div>
+    
+    <div class="container" style="text-align: left;">
+        <h3>Lottery</h3>
+        <div class="game-icon" onclick="alert('Wingo Starting...')">
+            <img src="https://cdn-icons-png.flaticon.com/512/1041/1041409.png" width="50">
+            <div style="font-size: 12px; margin-top: 5px;">Wingo</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showAuth(type) {
+        // Tabs switch karne ka logic
+    }
+
+    function login() {
+        document.getElementById('auth-page').style.display = 'none';
+        document.getElementById('home-page').style.display = 'block';
+    }
+</script>
 </body>
 </html>
+
