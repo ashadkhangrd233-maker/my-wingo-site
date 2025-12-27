@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wingo Game</title>
+    <style>
+        body { background-color: #1a1a1a; color: white; font-family: Arial, sans-serif; text-align: center; margin: 0; padding: 20px; }
+        .balance-card { background: #333; padding: 20px; border-radius: 15px; margin-bottom: 20px; }
+        .btn-container { display: flex; justify-content: center; gap: 10px; }
+        .btn { padding: 15px 30px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; color: white; }
+        .green { background: #4CAF50; } .violet { background: #9c27b0; } .red { background: #f44336; }
+    </style>
+</head>
+<body>
+    <div class="balance-card">
+        <h2>🎰 Wingo Pro</h2>
+        <p>Wallet Balance: <span id="user-bal">₹150.00</span></p>
+    </div>
+    <div class="btn-container">
+        <button class="btn green" onclick="sendBet('Green')">Green</button>
+        <button class="btn violet" onclick="sendBet('Violet')">Violet</button>
+        <button class="btn red" onclick="sendBet('Red')">Red</button>
+    </div>
+    <script>
+        function sendBet(color) {
+            alert("Bet Placed on " + color + "! Admin approval ka wait karein.");
+            // Yahan hum baad mein Telegram API jochenge
+        }
+    </script>
+</body>
+</html>
