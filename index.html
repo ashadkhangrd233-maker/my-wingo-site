@@ -3,147 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jalwa Premium</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <title>Arman Game</title>
     <style>
-        :root { --main-color: #28c76f; --bg-dark: #090e1e; --card-bg: #161d31; }
-        body { background: var(--bg-dark); color: white; font-family: 'Poppins', sans-serif; margin: 0; }
-        .page { display: none; padding-bottom: 80px; }
-        .active-page { display: block; }
-
-        /* Auth UI */
-        .auth-container { text-align: center; padding: 40px 20px; }
-        .input-group { background: var(--card-bg); border-radius: 12px; margin: 15px 0; padding: 12px; display: flex; align-items: center; border: 1px solid #283046; }
-        input { background: transparent; border: none; color: white; width: 100%; outline: none; margin-left: 10px; font-size: 16px; }
-        .btn-green { background: linear-gradient(90deg, #28c76f, #48da89); border: none; width: 100%; padding: 15px; border-radius: 30px; color: white; font-weight: bold; cursor: pointer; font-size: 18px; }
-
-        /* Wingo UI */
-        .header { background: var(--card-bg); padding: 15px; display: flex; justify-content: space-between; border-bottom: 1px solid #283046; }
-        .timer-section { background: var(--card-bg); margin: 10px; padding: 15px; border-radius: 15px; display: flex; justify-content: space-between; border-left: 5px solid var(--main-color); }
-        .num-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; padding: 15px; }
-        .n-btn { border: none; height: 50px; width: 50px; border-radius: 50%; color: white; font-weight: bold; font-size: 18px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
-
-        /* Real Bet Popup (Jalwa Style) */
-        #bet-popup { position: fixed; bottom: -100%; left: 0; width: 100%; background: #1f2937; border-radius: 25px 25px 0 0; z-index: 1000; transition: 0.4s; padding: 20px 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); }
-        .popup-active { bottom: 0 !important; }
-        .multiplier-btn { background: #374151; border: none; color: white; padding: 8px 15px; border-radius: 5px; margin: 5px; cursor: pointer; }
-        .multiplier-btn.active { background: var(--main-color); }
-
-        /* Footer Nav */
-        .footer-nav { position: fixed; bottom: 0; width: 100%; background: var(--card-bg); display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #283046; }
-        .nav-icon { font-size: 10px; color: #8a8d91; text-align: center; }
-        .nav-icon.active { color: var(--main-color); }
+        :root { --main-bg: #0d111b; --card-bg: #161d31; --accent: #28c76f; }
+        body { background: var(--main-bg); color: white; font-family: 'Arial', sans-serif; margin: 0; padding-bottom: 80px; }
         
-        /* Specific Number Colors */
-        .c0, .c5 { background: linear-gradient(#b659fe, #fb4e4e); }
-        .c1, .c3, .c7, .c9 { background: #28c76f; }
-        .c2, .c4, .c6, .c8 { background: #fb4e4e; }
+        /* Header */
+        .header { padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #283046; }
+        .logo { font-size: 20px; font-weight: bold; color: #facc15; }
+        .logo span { color: var(--accent); }
+
+        /* Wallet Card (Same as Photo) */
+        .balance-card { 
+            background: linear-gradient(135deg, #1e8e4e 0%, #28c76f 100%); 
+            margin: 15px; padding: 25px; border-radius: 20px; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .balance-card small { opacity: 0.8; font-size: 14px; }
+        .balance-card h2 { margin: 10px 0; font-size: 32px; }
+        .card-btns { display: flex; gap: 10px; margin-top: 15px; }
+        .c-btn { border: none; padding: 8px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; }
+        .withdraw { background: #ff4d4d; color: white; }
+        .deposit { background: white; color: var(--accent); }
+
+        /* Lottery Section */
+        .section-title { margin: 20px; border-left: 4px solid var(--accent); padding-left: 10px; font-size: 18px; }
+        .game-box { 
+            background: var(--card-bg); margin: 15px; padding: 30px; 
+            border-radius: 20px; text-align: center; border: 1px solid #283046;
+            transition: 0.3s;
+        }
+        .game-box:active { transform: scale(0.95); }
+        .game-box img { width: 80px; margin-bottom: 10px; }
+
+        /* Bottom Nav (Same as Photo) */
+        .nav-bar { 
+            position: fixed; bottom: 0; width: 100%; background: var(--card-bg); 
+            display: flex; justify-content: space-around; padding: 12px 0; 
+            border-top: 1px solid #283046; z-index: 1000;
+        }
+        .nav-item { text-align: center; color: #8a8d91; font-size: 12px; cursor: pointer; }
+        .nav-item.active { color: var(--accent); }
     </style>
 </head>
 <body>
 
-<div id="login-page" class="page active-page auth-container">
-    <h1 style="color: var(--main-color);">JALWA</h1>
-    <div class="input-group">📞<input type="number" id="l-phone" placeholder="Phone number"></div>
-    <div class="input-group">🔒<input type="password" id="l-pass" placeholder="Password"></div>
-    <button class="btn-green" onclick="goTo('home-page')">Log in</button>
-    <p onclick="goTo('register-page')">Don't have an account? <span style="color: var(--main-color);">Register</span></p>
-</div>
+    <div class="header">
+        <div class="logo">ARMAN<span>.GAME</span></div>
+        <div style="font-size: 12px; background: #161d31; padding: 5px 10px; border-radius: 10px;">🇮🇳 EN</div>
+    </div>
 
-<div id="home-page" class="page">
-    <div class="header"><b>JALWA.GAME</b><span>🇮🇳 EN</span></div>
-    <div style="background: linear-gradient(to right, #28c76f, #1e8e4e); margin:15px; padding:25px; border-radius:15px;">
+    <div class="balance-card">
         <small>Total Balance</small>
-        <h2 id="wallet-bal">₹150.00</h2>
-    </div>
-    <div style="padding: 20px; text-align: center;">
-        <div onclick="goTo('game-page')" style="background:var(--card-bg); padding:30px; border-radius:20px;">
-            <img src="https://cdn-icons-png.flaticon.com/512/1041/1041409.png" width="80"><br>
-            <h3 style="margin:10px 0 0;">WIN GO</h3>
+        <h2 id="wallet">₹150.00</h2>
+        <div class="card-btns">
+            <button class="c-btn withdraw">Withdraw</button>
+            <button class="c-btn deposit">Deposit</button>
         </div>
     </div>
-</div>
 
-<div id="game-page" class="page">
-    <div class="header"><span onclick="goTo('home-page')">🔙</span> <b>Wingo 1Min</b></div>
-    <div class="timer-section">
-        <div>Period<br><b id="period">20251227001</b></div>
-        <div style="text-align:right;">Time left<br><b id="timer" style="color:var(--main-color); font-size:22px;">00:60</b></div>
+    <div class="section-title">Lottery</div>
+    <div class="game-box" onclick="alert('Wingo Starting...')">
+        <img src="https://cdn-icons-png.flaticon.com/512/1041/1041409.png">
+        <div style="font-size: 20px; font-weight: bold;">Win Go 1 Min</div>
     </div>
 
-    <div class="num-grid">
-        <script>
-            for(let i=0; i<=9; i++) {
-                document.write(`<button class="n-btn c${i}" onclick="openBetPopup(${i})">${i}</button>`);
-            }
-        </script>
+    <div class="nav-bar">
+        <div class="nav-item active">🏠<br>Home</div>
+        <div class="nav-item">🎮<br>Activity</div>
+        <div class="nav-item">💼<br>Wallet</div>
+        <div class="nav-item">👤<br>Account</div>
     </div>
 
-    <div style="display:flex; gap:10px; padding:0 15px;">
-        <button class="btn-green" style="background:#ffa500;" onclick="openBetPopup('Big')">BIG</button>
-        <button class="btn-green" style="background:#4d89ff;" onclick="openBetPopup('Small')">SMALL</button>
-    </div>
-</div>
-
-<div id="bet-popup">
-    <div style="padding: 15px;">
-        <h3 id="bet-title">Bet on Green</h3>
-        <p>Amount: <span id="total-bet-amt" style="color:var(--main-color); font-weight:bold;">₹1</span></p>
-        <div class="multiplier-box">
-            <button class="multiplier-btn active" onclick="setMult(1, this)">x1</button>
-            <button class="multiplier-btn" onclick="setMult(10, this)">x10</button>
-            <button class="multiplier-btn" onclick="setMult(100, this)">x100</button>
-        </div>
-        <button class="btn-green" style="margin-top:20px;" onclick="confirmBet()">Confirm Bet</button>
-    </div>
-</div>
-
-<script>
-    const tg = window.Telegram.WebApp;
-    tg.expand();
-
-    let currentBetType = "";
-    let currentMultiplier = 1;
-    let wallet = 150.00;
-
-    function goTo(id) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-        document.getElementById(id).classList.add('active-page');
-    }
-
-    function openBetPopup(type) {
-        currentBetType = type;
-        document.getElementById('bet-title').innerText = "Bet on: " + type;
-        document.getElementById('bet-popup').classList.add('popup-active');
-    }
-
-    function setMult(val, btn) {
-        currentMultiplier = val;
-        document.getElementById('total-bet-amt').innerText = "₹" + val;
-        document.querySelectorAll('.multiplier-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-    }
-
-    function confirmBet() {
-        if(wallet >= currentMultiplier) {
-            wallet -= currentMultiplier;
-            document.getElementById('wallet-bal').innerText = "₹" + wallet.toFixed(2);
-            tg.sendData(`BET:${currentBetType}:${currentMultiplier}`);
-            document.getElementById('bet-popup').classList.remove('popup-active');
-            alert("Bet Success! Amount cut from wallet.");
-        } else {
-            alert("Insufficient Balance!");
-        }
-    }
-
-    // Live Timer
-    let sec = 60;
-    setInterval(() => {
-        sec--;
-        if(sec < 0) { sec = 60; document.getElementById('period').innerText++; }
-        document.getElementById('timer').innerText = `00:${sec < 10 ? '0'+sec : sec}`;
-    }, 1000);
-</script>
 </body>
 </html>
 
